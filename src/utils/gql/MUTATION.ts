@@ -11,6 +11,7 @@ export const ADD_PROFESSIONAL_COURIER_MANIFEST = gql`
     $productName: String!,
     $quantity: Int!,
     $paymentMethod: String!
+    $transactionId: String!
   ) {
     addProfessionalCourierManifest(input: {
       orderNumber: $orderNumber,
@@ -21,6 +22,7 @@ export const ADD_PROFESSIONAL_COURIER_MANIFEST = gql`
       productName: $productName,
       quantity: $quantity,
       paymentMethod: $paymentMethod
+      transactionId: $transactionId
     }) {
       message
     }

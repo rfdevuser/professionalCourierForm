@@ -1,9 +1,7 @@
-
 "use client";
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_PROFESSIONAL_COURIER_MANIFEST } from '@/utils/gql/MUTATION';
-
 
 const OrderForm = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +13,7 @@ const OrderForm = () => {
     productName: '',
     quantity: '', // Updated field
     paymentMethod: 'COD', // Default to COD
+    transactionId: '', // New field
   });
 
   const [addManifest, { data, loading, error }] = useMutation(ADD_PROFESSIONAL_COURIER_MANIFEST);
@@ -26,7 +25,7 @@ const OrderForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
- 
+
     try {
       const { data } = await addManifest({
         variables: {
@@ -38,6 +37,7 @@ const OrderForm = () => {
           productName: formData.productName,
           quantity: parseInt(formData.quantity, 10),
           paymentMethod: formData.paymentMethod,
+          transactionId: formData.transactionId, // Pass the transaction_id
         },
       });
 
@@ -52,6 +52,7 @@ const OrderForm = () => {
           productName: '',
           quantity: '',
           paymentMethod: 'COD',
+          transactionId: '', // Reset transaction_id
         });
       }
     } catch (err) {
@@ -62,7 +63,6 @@ const OrderForm = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-12 bg-gradient-to-br from-blue-100 to-blue-300 shadow-2xl rounded-lg">
-      {/* <h2 className="text-4xl font-extrabold mb-8 text-gray-800 text-center">Professional Courier Manifest Form</h2> */}
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1">
@@ -151,6 +151,19 @@ const OrderForm = () => {
             id="quantity"
             name="quantity"
             value={formData.quantity}
+            onChange={handleChange}
+            className="mt-2 block w-full border-gray-300 rounded-lg shadow-lg focus:border-blue-600 focus:ring-blue-600 sm:text-lg transition duration-150 ease-in-out"
+            required
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label htmlFor="transactionId" className="block text-lg font-medium text-gray-700">Transaction ID</label>
+          <input
+            type="text"
+            id="transactionId"
+            name="transactionId"
+            value={formData.transactionId}
             onChange={handleChange}
             className="mt-2 block w-full border-gray-300 rounded-lg shadow-lg focus:border-blue-600 focus:ring-blue-600 sm:text-lg transition duration-150 ease-in-out"
             required
